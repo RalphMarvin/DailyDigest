@@ -1,5 +1,6 @@
 package org.behemoth.dailydigest.presentation.ui.sources
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +16,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -22,6 +24,7 @@ import org.behemoth.dailydigest.domain.entity.NewsSource
 import org.behemoth.dailydigest.domain.usecase.GetNewsBySourceUseCase
 import org.behemoth.dailydigest.domain.usecase.GetSourcesUseCase
 import org.behemoth.dailydigest.presentation.ui.LocalToastManager
+import org.behemoth.dailydigest.presentation.ui.common.CenteredTopAppBar
 import org.behemoth.dailydigest.presentation.ui.home.ArticleItem
 import org.behemoth.dailydigest.presentation.viewmodel.SourcesViewModel
 import org.koin.compose.koinInject
@@ -46,12 +49,8 @@ fun SourcesScreen() {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(selectedSource?.name ?: "News Sources") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                ),
+            CenteredTopAppBar(
+                title = selectedSource?.name ?: "News Sources",
                 navigationIcon = {
                     if (selectedSource != null) {
                         IconButton(onClick = { selectedSource = null }) {
@@ -157,13 +156,13 @@ fun SourceCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
+    Box(
         modifier = modifier
             .padding(8.dp)
             .fillMaxWidth()
-            .clickable(onClick = onClick),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        shape = RoundedCornerShape(12.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.05f)) // ✅ Background here
+            .clickable(onClick = onClick)
     ) {
         Column(
             modifier = Modifier
@@ -186,3 +185,4 @@ fun SourceCard(
         }
     }
 }
+
