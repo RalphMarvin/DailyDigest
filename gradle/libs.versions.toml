@@ -34,6 +34,7 @@ russhwolfMultiplatformSettings = "1.0.0"
 volley = "1.2.1"
 voyagerKoin = "1.0.0-rc05"
 roomCompilerProcessingTesting = "2.7.1"
+foundationAndroid = "1.8.0"
 
 [libraries]
 androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
@@ -80,6 +81,7 @@ voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.
 voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyagerKoin" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyagerKoin" }
 androidx-room-compiler-processing-testing = { group = "androidx.room", name = "room-compiler-processing-testing", version.ref = "roomCompilerProcessingTesting" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
