@@ -23,6 +23,7 @@ import org.behemoth.dailydigest.domain.entity.Article
 import org.behemoth.dailydigest.domain.usecase.GetSavedArticlesUseCase
 import org.behemoth.dailydigest.domain.usecase.RemoveArticleUseCase
 import org.behemoth.dailydigest.presentation.ui.LocalToastManager
+import org.behemoth.dailydigest.presentation.ui.common.CenteredTopAppBar
 import org.behemoth.dailydigest.presentation.ui.home.ArticleItem
 import org.behemoth.dailydigest.presentation.viewmodel.LibraryViewModel
 import org.koin.compose.koinInject
@@ -52,12 +53,8 @@ fun LibraryScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Saved Articles") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+            CenteredTopAppBar(
+                title = "Saved Articles"
             )
         }
     ) { paddingValues ->
