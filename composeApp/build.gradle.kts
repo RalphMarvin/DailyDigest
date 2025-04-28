@@ -119,6 +119,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.foundation.android)
     debugImplementation(compose.uiTooling)
 
     // 🧹 REMOVE this: it was wrongly pulling Android-only Material3 again
