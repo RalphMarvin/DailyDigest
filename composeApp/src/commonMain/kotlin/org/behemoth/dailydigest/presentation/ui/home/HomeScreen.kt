@@ -33,6 +33,7 @@ import org.behemoth.dailydigest.domain.usecase.GetNewsUseCase
 import org.behemoth.dailydigest.domain.usecase.RemoveArticleUseCase
 import org.behemoth.dailydigest.domain.usecase.SaveArticleUseCase
 import org.behemoth.dailydigest.presentation.ui.LocalToastManager
+import org.behemoth.dailydigest.presentation.ui.common.CenteredTopAppBar
 import org.behemoth.dailydigest.presentation.viewmodel.HomeViewModel
 import org.koin.compose.koinInject
 
@@ -69,12 +70,8 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Daily Digest") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+            CenteredTopAppBar(
+                title = "Daily Digest"
             )
         }
     ) { paddingValues ->
