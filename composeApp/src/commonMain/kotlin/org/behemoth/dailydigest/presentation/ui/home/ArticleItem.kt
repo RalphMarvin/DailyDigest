@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ContentAlpha
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +43,7 @@ import org.behemoth.dailydigest.platform.LocalUrlLauncher
 // These imports are only used on Android and will be ignored on iOS
 
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
@@ -113,40 +115,36 @@ fun ArticleItem(
 ) {
     val urlLauncher = LocalUrlLauncher.current
 
-    Card(
+    // Full background wrapper with color
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { 
+            .clip(RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.05f)) // ✅ Apply color here
+            .clickable {
                 urlLauncher.openUrl(article.url)
                 onArticleClick(article)
-            },
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        shape = RoundedCornerShape(12.dp)
+            }
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            // Image container with bookmark overlay
+        Column {
+            // Top image section with clipped corners
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(180.dp)
+                    .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
             ) {
-                // Article image
+                // Load image or show placeholder
                 article.imageUrl?.let { imageUrl ->
                     loadArticleImage(
                         imageUrl = imageUrl,
                         contentDescription = "Article image",
-                        modifier = Modifier
-                            .fillMaxSize()
+                        modifier = Modifier.fillMaxSize()
                     )
                 } ?: run {
-                    // Placeholder when no image is available
                     Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                        modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -158,7 +156,7 @@ fun ArticleItem(
                     }
                 }
 
-                // Save/Bookmark button overlay on top right
+                // Bookmark overlay
                 IconButton(
                     onClick = { onBookmarkClick(article) },
                     modifier = Modifier
@@ -178,22 +176,16 @@ fun ArticleItem(
                 }
             }
 
-            // Content area
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                // Source name
+            // Text content
+            Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = article.source.name,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.primary
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Article title
                 Text(
                     text = article.title,
                     style = MaterialTheme.typography.titleMedium,
@@ -203,7 +195,6 @@ fun ArticleItem(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Article description
                 article.description?.let { description ->
                     Text(
                         text = description,
@@ -216,7 +207,6 @@ fun ArticleItem(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
 
-                // Publication date at the bottom
                 Text(
                     text = "Published on ${formatDate(article.publishedAt)}",
                     style = MaterialTheme.typography.bodySmall,
