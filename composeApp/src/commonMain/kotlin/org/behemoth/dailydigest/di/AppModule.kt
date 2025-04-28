@@ -12,31 +12,24 @@ import org.behemoth.dailydigest.data.remote.NewsApi
 import org.behemoth.dailydigest.data.remote.NewsApiImpl
 import org.behemoth.dailydigest.data.repository.NewsRepositoryImpl
 import org.behemoth.dailydigest.domain.repository.NewsRepository
-import org.behemoth.dailydigest.domain.usecase.CheckArticleSavedStatusUseCase
-import org.behemoth.dailydigest.domain.usecase.GetArticleByIdUseCase
-import org.behemoth.dailydigest.domain.usecase.GetNewsUseCase
-import org.behemoth.dailydigest.domain.usecase.GetSavedArticlesUseCase
-import org.behemoth.dailydigest.domain.usecase.RemoveArticleUseCase
-import org.behemoth.dailydigest.domain.usecase.SaveArticleUseCase
+import org.behemoth.dailydigest.domain.usecase.*
 import org.behemoth.dailydigest.presentation.ui.common.ThemeManager
-import org.behemoth.dailydigest.presentation.viewmodel.HomeViewModel
-import org.behemoth.dailydigest.presentation.viewmodel.LibraryViewModel
+import org.behemoth.dailydigest.presentation.ui.common.OnboardingManager
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
+import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
-fun initKoin() {
-    startKoin {
-        modules(
-            networkModule,
-            dataModule,
-            domainModule,
-            presentationModule
-        )
-    }
+fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
+    appDeclaration()
+    modules(
+        platformModule(),
+        coreModule
+    )
 }
 
-val networkModule = module {
+val coreModule = module {
+    // API
     single {
         HttpClient {
             install(ContentNegotiation) {
@@ -51,30 +44,29 @@ val networkModule = module {
             }
         }
     }
-
     single<NewsApi> { NewsApiImpl(get()) }
-}
 
-val dataModule = module {
+    // Repository
     single<NewsRepository> { NewsRepositoryImpl(get()) }
 
-    // Settings for storing preferences
+    // Use Cases
+    single { GetNewsUseCase(get()) }
+    single { SaveArticleUseCase(get()) }
+    single { RemoveArticleUseCase(get()) }
+    single { GetSavedArticlesUseCase(get()) }
+    single { GetArticleByIdUseCase(get()) }
+    single { CheckArticleSavedStatusUseCase(get()) }
+    single { GetSourcesUseCase(get()) }
+    single { GetNewsBySourceUseCase(get()) }
+
+    // Settings
     single<Settings> { MapSettings() }
 
-    // Theme manager for handling theme preferences
-    single<ThemeManager> { ThemeManager(get()) }
+    // Theme Manager
+    single { ThemeManager(get()) }
+
+    // Onboarding Manager
+    single { OnboardingManager(get()) }
 }
 
-val domainModule = module {
-    factory { GetNewsUseCase(get()) }
-    factory { GetSavedArticlesUseCase(get()) }
-    factory { SaveArticleUseCase(get()) }
-    factory { RemoveArticleUseCase(get()) }
-    factory { GetArticleByIdUseCase(get()) }
-    factory { CheckArticleSavedStatusUseCase(get()) }
-}
-
-val presentationModule = module {
-    factory { HomeViewModel(get(), get(), get(), get()) }
-    factory { LibraryViewModel(get(), get()) }
-}
+expect fun platformModule(): Module
