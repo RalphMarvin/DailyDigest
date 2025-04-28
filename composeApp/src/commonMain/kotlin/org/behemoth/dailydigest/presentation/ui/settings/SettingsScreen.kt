@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.russhwolf.settings.Settings
 import org.behemoth.dailydigest.platform.LocalNotificationManager
 import org.behemoth.dailydigest.presentation.ui.LocalThemeManager
+import org.behemoth.dailydigest.presentation.ui.common.CenteredTopAppBar
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,12 +47,8 @@ fun SettingsScreen() {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Settings") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+            CenteredTopAppBar(
+                title = "Settings"
             )
         }
     ) { paddingValues ->
