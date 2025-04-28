@@ -53,39 +53,12 @@ fun MainScreen() {
                         Scaffold(
                             bottomBar = {
                                 NavigationBar {
-                                    Tabs.HomeTab.let { tab ->
-                                        NavigationBarItem(
-                                            selected = navigator.current == tab,
-                                            onClick = { navigator.current = tab },
-                                            icon = {
-                                                tab.options.icon?.let {
-                                                    Icon(
-                                                        painter = it,
-                                                        contentDescription = tab.options.title
-                                                    )
-                                                }
-                                            },
-                                            label = { Text(tab.options.title) }
-                                        )
-                                    }
-
-                                    Tabs.LibraryTab.let { tab ->
-                                        NavigationBarItem(
-                                            selected = navigator.current == tab,
-                                            onClick = { navigator.current = tab },
-                                            icon = {
-                                                tab.options.icon?.let {
-                                                    Icon(
-                                                        painter = it,
-                                                        contentDescription = tab.options.title
-                                                    )
-                                                }
-                                            },
-                                            label = { Text(tab.options.title) }
-                                        )
-                                    }
-
-                                    Tabs.SettingsTab.let { tab ->
+                                    listOf(
+                                        Tabs.HomeTab,
+                                        Tabs.SourcesTab,
+                                        Tabs.LibraryTab,
+                                        Tabs.SettingsTab
+                                    ).forEach { tab ->
                                         NavigationBarItem(
                                             selected = navigator.current == tab,
                                             onClick = { navigator.current = tab },
