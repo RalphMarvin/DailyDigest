@@ -5,8 +5,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Instant
 import org.behemoth.dailydigest.data.model.ArticleDto
+import org.behemoth.dailydigest.data.model.NewsSourceDto
+import org.behemoth.dailydigest.data.model.SourceDto
 import org.behemoth.dailydigest.data.remote.NewsApi
 import org.behemoth.dailydigest.domain.entity.Article
+import org.behemoth.dailydigest.domain.entity.NewsSource
 import org.behemoth.dailydigest.domain.entity.Source
 import org.behemoth.dailydigest.domain.repository.NewsRepository
 
@@ -87,6 +90,29 @@ class NewsRepositoryImpl(
         }
     }
 
+    override suspend fun getSources(language: String, country: String): Result<List<NewsSource>> {
+        return newsApi.getSources(language, country)
+            .map { response ->
+                response.sources.map { sourceDto ->
+                    mapSourceDtoToNewsSource(sourceDto)
+                }
+            }
+    }
+
+    override suspend fun getNewsBySource(sourceId: String, fromDate: String, toDate: String): Result<List<Article>> {
+        return newsApi.getNews(
+            query = "",
+            fromDate = fromDate,
+            toDate = toDate,
+            sortBy = "publishedAt",
+            sources = sourceId
+        ).map { response ->
+            response.articles.map { articleDto ->
+                mapArticleDtoToArticle(articleDto)
+            }
+        }
+    }
+
     private fun mapArticleDtoToArticle(articleDto: ArticleDto): Article {
         // Transform HTTP image URLs to HTTPS
         val secureImageUrl = articleDto.urlToImage?.let { url ->
@@ -111,6 +137,18 @@ class NewsRepositoryImpl(
             publishedAt = Instant.parse(articleDto.publishedAt),
             content = articleDto.content,
             isSaved = savedArticles.value.any { it.id == articleDto.url }
+        )
+    }
+
+    private fun mapSourceDtoToNewsSource(sourceDto: NewsSourceDto): NewsSource {
+        return NewsSource(
+            id = sourceDto.id,
+            name = sourceDto.name,
+            description = sourceDto.description,
+            url = sourceDto.url,
+            category = sourceDto.category,
+            language = sourceDto.language,
+            country = sourceDto.country
         )
     }
 }

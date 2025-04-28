@@ -2,6 +2,7 @@ package org.behemoth.dailydigest.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.behemoth.dailydigest.domain.entity.Article
+import org.behemoth.dailydigest.domain.entity.NewsSource
 
 interface NewsRepository {
     /**
@@ -55,4 +56,21 @@ interface NewsRepository {
      * @return Result containing boolean status
      */
     suspend fun isSaved(articleId: String): Result<Boolean>
+
+    /**
+     * Fetches available news sources
+     * @param language Language code
+     * @param country Country code
+     * @return Result containing list of news sources or error
+     */
+    suspend fun getSources(language: String, country: String): Result<List<NewsSource>>
+
+    /**
+     * Fetches news articles from a specific source
+     * @param sourceId The ID of the news source
+     * @param fromDate Start date for article search
+     * @param toDate End date for article search
+     * @return Result containing list of articles or error
+     */
+    suspend fun getNewsBySource(sourceId: String, fromDate: String, toDate: String): Result<List<Article>>
 }
