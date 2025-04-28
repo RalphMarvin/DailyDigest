@@ -1,10 +1,11 @@
 package org.behemoth.dailydigest.data.remote
 
 import org.behemoth.dailydigest.data.model.NewsResponse
+import org.behemoth.dailydigest.data.model.SourcesResponse
 
 /**
  * Interface for accessing the News API endpoints.
- * Provides methods to fetch news articles and top headlines.
+ * Provides methods to fetch news articles, top headlines, and sources.
  */
 interface NewsApi {
     /**
@@ -22,7 +23,8 @@ interface NewsApi {
         fromDate: String,
         toDate: String,
         sortBy: String,
-        apiKey: String = API_KEY
+        apiKey: String = API_KEY,
+        sources: String? = null
     ): Result<NewsResponse>
 
     /**
@@ -39,10 +41,24 @@ interface NewsApi {
         apiKey: String = API_KEY
     ): Result<NewsResponse>
 
+    /**
+     * Fetches available news sources based on language and country.
+     *
+     * @param language Language code (defaults to "en")
+     * @param country Country code (defaults to "us")
+     * @param apiKey API key for authentication (defaults to companion object API_KEY)
+     * @return Result containing SourcesResponse on success or error on failure
+     */
+    suspend fun getSources(
+        language: String = "en",
+        country: String = "us",
+        apiKey: String = API_KEY
+    ): Result<SourcesResponse>
+
     companion object {
         /** Base URL for the News API */
         const val BASE_URL = "https://newsapi.org/v2/"
-        
+
         /** API key for authentication */
         const val API_KEY = "8a9e4a11260d40a78da831a688493940"
     }

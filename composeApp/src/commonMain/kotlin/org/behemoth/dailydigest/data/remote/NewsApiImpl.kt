@@ -11,6 +11,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import io.ktor.utils.io.errors.IOException
 import org.behemoth.dailydigest.data.model.NewsResponse
+import org.behemoth.dailydigest.data.model.SourcesResponse
 
 class NewsApiImpl(private val httpClient: HttpClient) : NewsApi {
 
@@ -19,15 +20,19 @@ class NewsApiImpl(private val httpClient: HttpClient) : NewsApi {
         fromDate: String,
         toDate: String,
         sortBy: String,
-        apiKey: String
+        apiKey: String,
+        sources: String?
     ): Result<NewsResponse> {
         return try {
             val response = httpClient.get("${NewsApi.BASE_URL}everything") {
-                parameter("q", query)
+                if (query.isNotEmpty()) {
+                    parameter("q", query)
+                }
                 parameter("from", fromDate)
                 parameter("to", toDate)
                 parameter("sortBy", sortBy)
                 parameter("apiKey", apiKey)
+                sources?.let { parameter("sources", it) }
             }
 
             Result.success(response.body())
@@ -80,6 +85,35 @@ class NewsApiImpl(private val httpClient: HttpClient) : NewsApi {
             Result.failure(Exception("Network error: ${e.message ?: "Connection timeout or network issue"}. Please check your internet connection and try again."))
         } catch (e: Exception) {
             // Handle other exceptions
+            Result.failure(Exception("An unexpected error occurred: ${e.message ?: "Unknown error"}"))
+        }
+    }
+
+    override suspend fun getSources(
+        language: String,
+        country: String,
+        apiKey: String
+    ): Result<SourcesResponse> {
+        return try {
+            val response = httpClient.get("${NewsApi.BASE_URL}sources") {
+                parameter("language", language)
+                parameter("country", country)
+                parameter("apiKey", apiKey)
+            }
+
+            Result.success(response.body())
+        } catch (e: ClientRequestException) {
+            val errorMessage = when (e.response.status) {
+                HttpStatusCode.Unauthorized -> "Invalid API key. Please check your API key and try again."
+                HttpStatusCode.TooManyRequests -> "Too many requests. Please try again later."
+                else -> "Client error: ${e.response.status.description}"
+            }
+            Result.failure(Exception(errorMessage))
+        } catch (e: ServerResponseException) {
+            Result.failure(Exception("Server error: ${e.response.status.description}. Please try again later."))
+        } catch (e: IOException) {
+            Result.failure(Exception("Network error: ${e.message ?: "Connection timeout or network issue"}. Please check your internet connection and try again."))
+        } catch (e: Exception) {
             Result.failure(Exception("An unexpected error occurred: ${e.message ?: "Unknown error"}"))
         }
     }
