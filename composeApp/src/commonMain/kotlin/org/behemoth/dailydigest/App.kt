@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import org.behemoth.dailydigest.di.initKoin
 import org.behemoth.dailydigest.presentation.ui.MainScreen
 import org.behemoth.dailydigest.platform.ProvideUrlLauncher
+import org.behemoth.dailydigest.presentation.theme.DailyDigestTheme
 import org.behemoth.dailydigest.presentation.ui.common.OnboardingManager
 import org.behemoth.dailydigest.presentation.ui.welcome.WelcomeScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -31,13 +32,15 @@ fun App() {
         if (showMainScreen.value) {
             MainScreen()
         } else {
-            WelcomeScreen(
-                onboardingManager = onboardingManager,
-                onStartClick = {
-                    // Update the state to show the main screen
-                    showMainScreen.value = true
-                }
-            )
+            DailyDigestTheme {
+                WelcomeScreen(
+                    onboardingManager = onboardingManager,
+                    onStartClick = {
+                        // Update the state to show the main screen
+                        showMainScreen.value = true
+                    }
+                )
+            }
         }
     }
 }
