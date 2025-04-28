@@ -1,8 +1,10 @@
 package org.behemoth.dailydigest.presentation.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -25,11 +27,26 @@ sealed class Tabs {
         }
     }
 
-    object LibraryTab : Tab {
+    object SourcesTab : Tab {
         override val options: TabOptions
             @Composable
             get() = TabOptions(
                 index = 1u,
+                title = "Sources",
+                icon = rememberVectorPainter(Icons.AutoMirrored.Filled.List)
+            )
+
+        @Composable
+        override fun Content() {
+            org.behemoth.dailydigest.presentation.ui.sources.SourcesScreen()
+        }
+    }
+
+    object LibraryTab : Tab {
+        override val options: TabOptions
+            @Composable
+            get() = TabOptions(
+                index = 2u,
                 title = "Library",
                 icon = rememberVectorPainter(Icons.Default.Book)
             )
@@ -44,7 +61,7 @@ sealed class Tabs {
         override val options: TabOptions
             @Composable
             get() = TabOptions(
-                index = 2u,
+                index = 3u,
                 title = "Settings",
                 icon = rememberVectorPainter(Icons.Default.Settings)
             )
