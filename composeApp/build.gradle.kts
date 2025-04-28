@@ -40,7 +40,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
 
             // Google Fonts
-            implementation("androidx.compose.ui:ui-text-google-fonts:1.7.8")
+            implementation(libs.androidx.ui.text.google.fonts)
 
             // Lifecycle
             implementation(libs.androidx.lifecycle.viewmodel)
@@ -124,9 +124,6 @@ android {
 dependencies {
     implementation(libs.androidx.foundation.android)
     debugImplementation(compose.uiTooling)
-
-    // 🧹 REMOVE this: it was wrongly pulling Android-only Material3 again
-    // implementation(libs.androidx.material3.android)
 
     // Optional: AutoValue dependency if needed
     implementation("com.google.auto.value:auto-value:1.6.3") {
