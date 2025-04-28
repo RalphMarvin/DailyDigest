@@ -39,6 +39,9 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
+            // Google Fonts
+            implementation("androidx.compose.ui:ui-text-google-fonts:1.7.8")
+
             // Lifecycle
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
