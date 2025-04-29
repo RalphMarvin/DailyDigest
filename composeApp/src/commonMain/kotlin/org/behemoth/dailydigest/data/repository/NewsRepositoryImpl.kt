@@ -26,7 +26,7 @@ class NewsRepositoryImpl(
         toDate: String,
         sortBy: String
     ): Result<List<Article>> {
-        return newsApi.getNews(query, fromDate, toDate, sortBy)
+        return newsApi.getNews(query, fromDate, toDate, sortBy, org.behemoth.dailydigest.platform.ApiKeyProvider.apiKey)
             .map { response ->
                 response.articles.map { articleDto ->
                     mapArticleDtoToArticle(articleDto)
@@ -38,7 +38,7 @@ class NewsRepositoryImpl(
         category: String,
         country: String
     ): Result<List<Article>> {
-        return newsApi.getTopHeadlines(category, country)
+        return newsApi.getTopHeadlines(category, country, org.behemoth.dailydigest.platform.ApiKeyProvider.apiKey)
             .map { response ->
                 response.articles.map { articleDto ->
                     mapArticleDtoToArticle(articleDto)
@@ -91,7 +91,7 @@ class NewsRepositoryImpl(
     }
 
     override suspend fun getSources(language: String, country: String): Result<List<NewsSource>> {
-        return newsApi.getSources(language, country)
+        return newsApi.getSources(language, country, org.behemoth.dailydigest.platform.ApiKeyProvider.apiKey)
             .map { response ->
                 response.sources.map { sourceDto ->
                     mapSourceDtoToNewsSource(sourceDto)
@@ -105,6 +105,7 @@ class NewsRepositoryImpl(
             fromDate = fromDate,
             toDate = toDate,
             sortBy = "publishedAt",
+            apiKey = org.behemoth.dailydigest.platform.ApiKeyProvider.apiKey,
             sources = sourceId
         ).map { response ->
             response.articles.map { articleDto ->
