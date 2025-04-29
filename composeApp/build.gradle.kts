@@ -104,6 +104,10 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        val newsApiKey: String? = project.findProperty("NEWS_API_KEY") as String?
+        if (newsApiKey != null) {
+            buildConfigField("String", "NEWS_API_KEY", "\"$newsApiKey\"")
+        }
     }
     packaging {
         resources {
