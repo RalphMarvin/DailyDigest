@@ -15,7 +15,8 @@ interface NewsApi {
      * @param fromDate Start date for article search (format: YYYY-MM-DD)
      * @param toDate End date for article search (format: YYYY-MM-DD)
      * @param sortBy Sorting criteria (e.g., "relevancy", "popularity", "publishedAt")
-     * @param apiKey API key for authentication (defaults to companion object API_KEY)
+     * @param apiKey API key for authentication
+     * @param sources Optional sources to filter articles
      * @return Result containing NewsResponse on success or error on failure
      */
     suspend fun getNews(
@@ -23,7 +24,7 @@ interface NewsApi {
         fromDate: String,
         toDate: String,
         sortBy: String,
-        apiKey: String = API_KEY,
+        apiKey: String,
         sources: String? = null
     ): Result<NewsResponse>
 
@@ -32,13 +33,13 @@ interface NewsApi {
      *
      * @param category News category (defaults to "technology")
      * @param country Country code (defaults to "us")
-     * @param apiKey API key for authentication (defaults to companion object API_KEY)
+     * @param apiKey API key for authentication
      * @return Result containing NewsResponse on success or error on failure
      */
     suspend fun getTopHeadlines(
         category: String = "technology",
         country: String = "us",
-        apiKey: String = API_KEY
+        apiKey: String
     ): Result<NewsResponse>
 
     /**
@@ -46,20 +47,17 @@ interface NewsApi {
      *
      * @param language Language code (defaults to "en")
      * @param country Country code (defaults to "us")
-     * @param apiKey API key for authentication (defaults to companion object API_KEY)
+     * @param apiKey API key for authentication
      * @return Result containing SourcesResponse on success or error on failure
      */
     suspend fun getSources(
         language: String = "en",
         country: String = "us",
-        apiKey: String = API_KEY
+        apiKey: String
     ): Result<SourcesResponse>
 
     companion object {
         /** Base URL for the News API */
         const val BASE_URL = "https://newsapi.org/v2/"
-
-        /** API key for authentication */
-        const val API_KEY = "8a9e4a11260d40a78da831a688493940"
     }
 }
